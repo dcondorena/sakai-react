@@ -48,6 +48,7 @@
         "not op_mini all"
     ],
     "devDependencies": {
-        "react-error-overlay": "^6.0.9"
+        "react-error-overlay": "^6.0.9",
+        "react-hook-form": "^7.33.0"
     }
 }
