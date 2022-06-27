@@ -22,7 +22,7 @@ const Order = (props) => {
     });
     const [visibleRight, setVisibleRight] = useState(false);
 
-    const [setSelectedOrder] = useState(null);
+    const [selectedOrder, setSelectedOrder] = useState(null);
 
     const orderService = new OrderService();
 
@@ -152,7 +152,7 @@ const Order = (props) => {
      * Load Products
      * */
     const [products, setProducts] = useState([]);
-    const [setLoadingProducts] = useState(false);
+    const [loadingProducts, setLoadingProducts] = useState(false);
     const productService = new ProductService();
 
     // useEffect(() => {
