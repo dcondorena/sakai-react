@@ -2,18 +2,15 @@ import axios from 'axios'
 
 export class ProductService {
 
-    getCountries() {
-        return axios.get('assets/demo/data/countries.json')
-            .then(res => res.data.data);
-    }
-
     getProducts(params) {
         return axios.get('https://morning-thicket-18297.herokuapp.com/api/v1/products', {
             params: {
                 page: params.first / 2,
                 size: params.rows
             }
-        }).then(res => res.data);
+        }).then(res => res.data).catch(error => {
+            console.error('There was an error!', error);
+        });
     }
 
     saveProduct(product) {
@@ -25,9 +22,18 @@ export class ProductService {
             });
     }
 
-    updateProduct(product, productId) {
-        console.log("[ProductService] - Update Product By ProductId: ", productId)
-        return axios.put('https://morning-thicket-18297.herokuapp.com/api/v1/products', product)
+    updateProduct(product, selectedProduct) {
+        console.log("[ProductService] - Update Product By ProductId: ", selectedProduct.productId)
+        return axios.put('https://morning-thicket-18297.herokuapp.com/api/v1/products/' + selectedProduct.productId, product)
+            .then(response => response.data)
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    deleteProduct(selectedProduct) {
+        console.log("[ProductService] - Delete Product By ProductId: ", selectedProduct.productId)
+        return axios.delete('https://morning-thicket-18297.herokuapp.com/api/v1/products/' + selectedProduct.productId)
             .then(response => response.data)
             .catch(error => {
                 console.error('There was an error!', error);

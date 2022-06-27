@@ -1,15 +1,15 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {ProductService} from "../../service/products/ProductService";
 import {DataTable} from 'primereact/datatable';
 import {Column} from 'primereact/column';
 import {Button} from "primereact/button";
 import {Sidebar} from "primereact/sidebar";
 import {useForm, Controller} from "react-hook-form";
-import {classNames} from 'primereact/utils';
 import {InputText} from "primereact/inputtext";
 import {Dropdown} from "primereact/dropdown";
 import {InputSwitch} from "primereact/inputswitch";
 import {InputNumber} from "primereact/inputnumber";
+import Swal from "sweetalert2";
 
 const Product = (props) => {
     const [loading, setLoading] = useState(false);
@@ -44,7 +44,7 @@ const Product = (props) => {
     }
 
     const onPage = (event) => {
-        console.log("[ProductComponent] - Change Page Datable: ", event);
+        console.log("[ProductComponent] - Change Page DataTable: ", event);
         setLazyParams(event);
     }
 
@@ -55,38 +55,81 @@ const Product = (props) => {
     }
 
     const representativeBodyTemplate = (rowData) => {
-
+        /**
+         * Update product
+         * */
         const selectedData = (event) => {
             console.log("[ProductComponent] - Selected Data: ", rowData)
+            reset();
             setSelectedProduct(rowData)
             setVisibleRight(true)
-            setValue("name", "CAkess")
-            setValue("category", "Cookies")
-            setValue("unitPrice", 12)
-            setValue("active", true)
+            setValue("name", rowData.name)
+            setValue("category", rowData.category)
+            setValue("unitPrice", rowData.unitPrice)
+            setValue("active", rowData.active)
+        }
+
+        /**
+         * Delete product
+         * */
+
+        const onDelete = (event) => {
+            console.log("[ProductComponent] - Selected Data: ", rowData)
+            productService.deleteProduct(rowData).then(data => {
+                console.log("[ProductComponent]:  Result Delete Product Request: ", data);
+                reset();
+                setSelectedProduct(null);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Task done',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                setLazyParams({
+                    first: 0,
+                    rows: 2,
+                    page: 1
+                })
+            });
         }
 
         return (
             <React.Fragment>
-                <Button label="Edit" className="p-button-raised p-button-rounded" onClick={selectedData}/>
-                {/*<img alt={rowData.representative.name} src={`images/avatar/${rowData.representative.image}`} onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} width={32} style={{ verticalAlign: 'middle' }} />*/}
-                {/*<span className="image-text">{rowData.representative.name}</span>*/}
+                <div className="grid">
+                    <div className="col-6">
+                        <Button label="Edit" className="p-button-raised p-button-rounded p-button-warning" onClick={selectedData}/>
+                    </div>
+                    <div className="col-6">
+                        <Button label="Delete" className="p-button-raised p-button-rounded p-button-danger" onClick={onDelete}/>
+                    </div>
+                </div>
+            </React.Fragment>
+        );
+    }
+
+    const statusTemplate = (rowData) => {
+        return (
+            <React.Fragment>
+                {rowData.active ? <div>Active</div> : <div>Inactive</div>}
             </React.Fragment>
         );
     }
 
 
     const createProduct = (event) => {
-        const value = event.value;
+        reset()
+        setSelectedProduct(null);
         setVisibleRight(true);
-        // setSelectAll(value.length === totalRecords);
     }
     /**
      * Create Product
      */
     const defaultValues = {
         name: '',
-        category: null
+        category: null,
+        unitePrice: null,
+        active: null
     }
     const categoryList = [
         {label: 'Cookies', value: 'Cookies'},
@@ -98,61 +141,65 @@ const Product = (props) => {
 
 
     const {control, formState: {errors}, handleSubmit, reset, setValue} = useForm({defaultValues});
-    const [formData, setFormData] = useState({});
+    const [setFormData] = useState({});
+    const [submitted, setSubmitted] = useState(null);
 
     const onSubmit = (data) => {
         setFormData(data);
         console.log("[ProductComponent] - Form Data: ", data);
-        if (selectedProduct) {
-            productService.saveProduct(data).then(data => {
-                console.log("[ProductComponent]:  Result Save Product Request: ", data);
-                reset();
-                setVisibleRight(false);
-                setSelectedProduct(null);
-                setLazyParams({
-                    first: 0,
-                    rows: 2,
-                    page: 1
-                })
-            });
-        } else {
-            productService.saveProduct(data).then(data => {
-                console.log("[ProductComponent]:  Result Save Product Request: ", data);
-                reset();
-                setVisibleRight(false);
-                setSelectedProduct(null);
-                setLazyParams({
-                    first: 0,
-                    rows: 2,
-                    page: 1
-                })
-            });
+        if (submitted) {
+            if (selectedProduct) {
+                productService.updateProduct(data, selectedProduct).then(data => {
+                    console.log("[ProductComponent]:  Result Save Product Request: ", data);
+                    reset();
+                    setVisibleRight(false);
+                    setSelectedProduct(null);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Task done',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setLazyParams({
+                        first: 0,
+                        rows: 2,
+                        page: 1
+                    })
+                });
+            } else {
+                productService.saveProduct(data).then(data => {
+                    console.log("[ProductComponent]:  Result Save Product Request: ", data);
+                    reset();
+                    setVisibleRight(false);
+                    setSelectedProduct(null);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Task done',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setLazyParams({
+                        first: 0,
+                        rows: 2,
+                        page: 1
+                    })
+                });
+            }
         }
+
     };
 
     const getFormErrorMessage = (name) => {
         return errors[name] && <small className="p-error">{errors[name].message}</small>
     };
 
-
-    // const [submitted, setSubmitted] = useState();
-    // const {register, handleSubmit, control, formState: {errors}} = useForm({
-    //     // defaultValues: {
-    //     //     category: []
-    //     // }
-    // });
-
-    // const onSubmit = (data) => {
-    //     setSubmitted(data);
-    //     console.log("[ProductComponent] - Form Data: ", data);
-    // };
-    //
-    //
-    // const [selectedCategory, setCategory] = useState(null);
-    //
-    // const onCategoryChange = (e) => {
-    //     setCategory(e.value);
-    // }
+    const onCancel = () => {
+        setSubmitted(false);
+        setVisibleRight(false);
+        reset()
+    }
 
 
     return (
@@ -161,11 +208,11 @@ const Product = (props) => {
                 <div className="card">
                     <div className="grid">
                         <div className="col-12">
-                            <label>Productos</label>
+                            <h3>Products</h3>
                         </div>
 
                         <div className="col-3 col-offset-9">
-                            <Button label="Create Product" className="p-button-raised p-button-rounded" onClick={createProduct}/>
+                            <Button label="Create Product" className="p-button-raised p-button-rounded p-button-success" onClick={createProduct}/>
                         </div>
                         <div className="col-12">
                             <DataTable value={products} lazy responsiveLayout="scroll" dataKey="id"
@@ -174,81 +221,90 @@ const Product = (props) => {
                                        selection={selectedProducts} onSelectionChange={onSelectionChange}
                             >
                                 <Column field="name" header="Name"/>
+                                <Column field="category" header="Category"/>
+                                <Column field="unitPrice" header="Unit Price"/>
+                                <Column field="active" header="Status" body={statusTemplate}/>
                                 <Column field="options" header="Options" body={representativeBodyTemplate}/>
                             </DataTable>
                         </div>
                     </div>
                 </div>
             </div>
-            <Sidebar visible={visibleRight} position="right" style={{width: '35em'}} onHide={() => setVisibleRight(false)}>
-                <h3>Create Product</h3>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="grid" style={{paddingTop: '40px'}}>
-                        <div className="col-3"><b>Name: </b></div>
-                        <div className="col-9">
-                            {/*<InputText style={{width: '100%'}} name="name" {...register("name", {required: true, maxLength: 20})} />*/}
-                            {/*{errors.name?.type === 'required' && "Name is required"}*/}
-                            <div className="field">
-                                <Controller name="name" control={control} rules={{required: 'Name is required.'}} render={({field, fieldState}) => (
-                                    <InputText id={field.name} {...field} autoFocus className={classNames({'p-invalid': fieldState.invalid})}/>
-                                )}/>
-                            </div>
-                            <div className="col-12">
-                                {getFormErrorMessage('name')}
-                            </div>
-                        </div>
+            <Sidebar visible={visibleRight} position="right" style={{width: '35em'}} onHide={onCancel}>
+                <div className="grid p-fluid">
+                    <div className="col">
+                        <div className="card">
+                            <h3>Product</h3>
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <div className="grid" style={{paddingTop: '40px'}}>
+                                    <div className="col-3"><b>Name: </b></div>
+                                    <div className="col-9">
+                                        {/*<InputText style={{width: '100%'}} name="name" {...register("name", {required: true, maxLength: 20})} />*/}
+                                        {/*{errors.name?.type === 'required' && "Name is required"}*/}
+                                        <div className="field">
+                                            <Controller name="name" control={control} rules={{required: 'Name is required.'}} render={({field}) => (
+                                                <InputText id={field.name} {...field} autoFocus/>
+                                            )}/>
+                                        </div>
+                                        <div className="col-12">
+                                            {getFormErrorMessage('name')}
+                                        </div>
+                                    </div>
 
-                        <div className="col-3"><b>Category: </b></div>
-                        <div className="col-9">
-                            <div className="field">
-                                <Controller name="category" rules={{required: 'Category is required.'}} control={control} render={({field}) => (
-                                    <Dropdown id={field.name} value={field.value} onChange={(e) => field.onChange(e.value)} options={categoryList} showClear={true}/>
-                                )}/>
-                            </div>
-                            <div className="col-12">
-                                {getFormErrorMessage('category')}
-                            </div>
+                                    <div className="col-3"><b>Category: </b></div>
+                                    <div className="col-9">
+                                        <div className="field">
+                                            <Controller name="category" rules={{required: 'Category is required.'}} control={control} render={({field}) => (
+                                                <Dropdown id={field.name} value={field.value} onChange={(e) => field.onChange(e.value)} options={categoryList} showClear={true}/>
+                                            )}/>
+                                        </div>
+                                        <div className="col-12">
+                                            {getFormErrorMessage('category')}
+                                        </div>
 
-                        </div>
-
-
-                        <div className="col-3"><b>Unit price: </b></div>
-                        <div className="col-9">
-                            <div className="field">
-                                <Controller name="unitPrice" rules={{required: 'Unit price is required.'}} control={control} render={({field}) => (
-                                    <InputNumber inputId="integeronly" id={field.name} value={field.value} onValueChange={(e) => field.onChange(e.value)}/>
-                                )}/>
-                            </div>
-                            <div className="col-12">
-                                {getFormErrorMessage('unitPrice')}
-                            </div>
-
-                        </div>
-
-                        <div className="col-3"><b>Active: </b></div>
-                        <div className="col-9">
-                            <div className="field">
-                                <Controller name="active" rules={{required: 'Status is required.'}} control={control} render={({field}) => (
-                                    <InputSwitch id={field.name} checked={field.value} onChange={(e) => field.onChange(e.value)}/>
-                                )}/>
-                            </div>
-                            <div className="col-12">
-                                {getFormErrorMessage('active')}
-                            </div>
-
-                        </div>
+                                    </div>
 
 
-                        <div className="col-4" style={{paddingTop: '40px'}}>
-                            <Button label="Save" className="p-button-raised p-button-rounded" style={{width: '100%'}} type="submit"/>
-                        </div>
-                        <div className="col-4 col-offset-4" style={{paddingTop: '40px'}}>
-                            <Button label="Cancel" className="p-button-raised p-button-rounded" style={{width: '100%'}} onClick={() => {
-                                setVisibleRight(false);
-                            }}/>
+                                    <div className="col-3"><b>Unit price: </b></div>
+                                    <div className="col-9">
+                                        <div className="field">
+                                            <Controller name="unitPrice" rules={{required: 'Unit price is required.'}} control={control} render={({field}) => (
+                                                <InputNumber inputId="integeronly" id={field.name} value={field.value} onValueChange={(e) => field.onChange(e.value)}/>
+                                            )}/>
+                                        </div>
+                                        <div className="col-12">
+                                            {getFormErrorMessage('unitPrice')}
+                                        </div>
+
+                                    </div>
+
+                                    <div className="col-3"><b>Active: </b></div>
+                                    <div className="col-9">
+                                        <div className="field">
+                                            <Controller name="active" control={control} render={({field}) => (
+                                                <InputSwitch id={field.name} checked={field.value} onChange={(e) => field.onChange(e.value)}/>
+                                            )}/>
+                                        </div>
+                                        <div className="col-12">
+                                            {getFormErrorMessage('active')}
+                                        </div>
+
+                                    </div>
+
+
+                                    <div className="col-4" style={{paddingTop: '40px'}}>
+                                        <Button label="Save" className="p-button-raised p-button-rounded" style={{width: '100%'}} onClick={() => {
+                                            setSubmitted(true);
+                                        }} type="submit"/>
+                                    </div>
+                                    <div className="col-4 col-offset-4" style={{paddingTop: '40px'}}>
+                                        <Button label="Cancel" className="p-button-raised p-button-rounded" style={{width: '100%'}} onClick={onCancel}/>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </form>
+                </div>
             </Sidebar>
         </div>
 

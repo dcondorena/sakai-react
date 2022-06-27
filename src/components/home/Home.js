@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Button } from 'primereact/button';
-import { useHistory } from "react-router-dom";
+import React from 'react';
+import {Button} from 'primereact/button';
+import {useHistory} from "react-router-dom";
 
 const Home = (props) => {
     const history = useHistory();
 
-    const routeComponent = () => {
-        history.push('/products')
+    const routeComponent = (path) => {
+        history.push('/' + path)
     }
     return (
         <div className="grid">
@@ -16,7 +16,7 @@ const Home = (props) => {
                         <div>
                             <span className="block text-500 font-medium mb-3">Orders</span>
                             <div className="text-900 font-medium text-xl">
-                                <Button label="Show" className="p-button-raised p-button-rounded" />
+                                <Button label="Show" className="p-button-raised p-button-rounded" onClick={() => routeComponent('orders')}/>
                             </div>
                         </div>
                         <div className="flex align-items-center justify-content-center bg-blue-100 border-round" style={{width: '2.5rem', height: '2.5rem'}}>
@@ -31,7 +31,7 @@ const Home = (props) => {
                         <div>
                             <span className="block text-500 font-medium mb-3">Products</span>
                             <div className="text-900 font-medium text-xl">
-                                <Button label="Show" className="p-button-raised p-button-rounded"  onClick={routeComponent} />
+                                <Button label="Show" className="p-button-raised p-button-rounded" onClick={() => routeComponent('products')}/>
                             </div>
                         </div>
                         <div className="flex align-items-center justify-content-center bg-orange-100 border-round" style={{width: '2.5rem', height: '2.5rem'}}>
