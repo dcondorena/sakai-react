@@ -114,7 +114,7 @@ const Order = (props) => {
     }
 
     const {control, formState: {errors}, handleSubmit, reset} = useForm({defaultValues});
-    const [setFormData] = useState({});
+    const [formData, setFormData] = useState({});
 
     const onSubmit = (data) => {
         setFormData(data);
