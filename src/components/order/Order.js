@@ -66,7 +66,7 @@ const Order = (props) => {
 
         const onDelete = (event) => {
             console.log("[OrderComponent] - Selected Data: ", rowData)
-            orderService.deleteProduct(rowData).then(data => {
+            orderService.deleteOrder(rowData).then(data => {
                 console.log("[OrderComponent]:  Result Delete Order Request: ", data);
                 reset();
                 setSelectedOrder(null);
@@ -95,6 +95,15 @@ const Order = (props) => {
                         <Button label="Delete" className="p-button-raised p-button-rounded p-button-danger" onClick={onDelete}/>
                     </div>
                 </div>
+            </React.Fragment>
+        );
+    }
+
+
+    const totalAmountTemplate = (rowData) => {
+        return (
+            <React.Fragment>
+                {rowData.totalAmount} $
             </React.Fragment>
         );
     }
@@ -194,7 +203,7 @@ const Order = (props) => {
                                 <Column field="customer" header="Consumer"/>
                                 <Column field="status" header="Status"/>
                                 <Column field="registerDate" header="Date"/>
-                                <Column field="totalAmount" header="Total"/>
+                                <Column field="totalAmount" header="Total" body={totalAmountTemplate}/>
                                 <Column field="actions" header="Actions" body={representativeBodyTemplate}/>
                             </DataTable>
                         </div>

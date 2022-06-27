@@ -104,7 +104,7 @@ const OrderDetail = (props) => {
     }
 
     const {control, formState: {errors}, handleSubmit, reset} = useForm({defaultValues});
-    const [setFormData] = useState({});
+    const [formData, setFormData] = useState({});
 
     const onSubmit = (data) => {
         setFormData(data);
@@ -144,7 +144,7 @@ const OrderDetail = (props) => {
      * Load Items
      * */
     const [items, setItems] = useState([]);
-    const [setLoadingItems] = useState(false);
+    const [loadingItems, setLoadingItems] = useState(false);
     const productService = new ProductService();
     const [submitted, setSubmitted] = useState(null);
 
@@ -168,6 +168,25 @@ const OrderDetail = (props) => {
     }
 
 
+    const onDelete = (index) => {
+        console.log("[OrderDetailComponent] - Selected Index: ", index)
+        let _products = [...products];
+        _products.splice(index, 1);
+        setProducts(_products)
+        console.log("[OrderDetailComponent] - Final Items: ", _products);
+        orderService.updateOrder({items: _products, status: order?.status}, order?.orderId).then(data => {
+            console.log("[OrderDetailComponent] - Result Update Order By OrderId Request: ", data);
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Updated order',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            loadOrder();
+        });
+    }
+
     return (
         <div className="grid p-fluid">
             <div className="col">
@@ -181,7 +200,6 @@ const OrderDetail = (props) => {
                         </div>
                         <div className="col-12">
                             <h2>Order N° {order?.orderNumber}</h2>
-
                         </div>
                         <div className="col-12">
                             <b>Customer: </b> {order?.customer}
@@ -202,6 +220,18 @@ const OrderDetail = (props) => {
                                 <Column field="unitPrice" header="Unit Price" editor={(options) => numberEditor(options)} style={{width: '20%'}}/>
                                 <Column field="active" header="Status" body={statusTemplate}/>
                                 <Column rowEditor headerStyle={{width: '10%', minWidth: '8rem'}} bodyStyle={{textAlign: 'center'}}/>
+
+                                <Column field="actions" header="Actions" body={(data, props) =>
+                                    <div className="grid">
+                                        <div className="col-12">
+                                            <Button icon="pi pi-times" className="p-button-rounded p-button-danger p-button-outlined" aria-label="Cancel"
+                                                    onClick={(e) => {
+                                                        onDelete(props.rowIndex)
+                                                    }
+                                                    }/>
+                                        </div>
+                                    </div>
+                                }/>
                             </DataTable>
                         </div>
                         <div className="col-4 col-offset-7">

@@ -141,9 +141,9 @@ const App = () => {
             items: [{
                 label: 'Home', icon: 'pi pi-fw pi-home', to: '/'
             },{
-                label: 'Products', icon: 'pi pi-fw pi-home', to: '/products'
+                label: 'Products', icon: 'pi pi-fw pi-arrow-circle-right', to: '/products'
             },{
-                label: 'Orders', icon: 'pi pi-fw pi-home', to: '/orders'
+                label: 'Orders', icon: 'pi pi-fw pi-arrow-circle-right', to: '/orders'
             }]
         }
     ];
@@ -186,7 +186,6 @@ const App = () => {
 
             <div className="layout-main-container">
                 <div className="layout-main">
-                    {/*<Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />*/}
                     <Route path="/" exact render={() => <Home colorMode={layoutColorMode} location={location} />} />
                     <Route path="/products" component={Product} />
                     <Route path="/orders" component={Order} />

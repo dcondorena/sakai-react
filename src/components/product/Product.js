@@ -12,6 +12,9 @@ import {InputNumber} from "primereact/inputnumber";
 import Swal from "sweetalert2";
 
 const Product = (props) => {
+    /**
+     * Products
+     * */
     const [loading, setLoading] = useState(false);
     const [totalRecords, setTotalRecords] = useState(0);
     const [products, setProducts] = useState(null);
@@ -21,12 +24,18 @@ const Product = (props) => {
         rows: 2,
         page: 1
     });
-    const [visibleRight, setVisibleRight] = useState(false);
 
     const [selectedProduct, setSelectedProduct] = useState(null);
-
     const productService = new ProductService();
 
+    /**
+     * Sidebar
+     * */
+    const [visibleRight, setVisibleRight] = useState(false);
+
+    /**
+     * Load Products
+     * */
     useEffect(() => {
         loadLazyData();
     }, [lazyParams]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -43,10 +52,17 @@ const Product = (props) => {
 
     }
 
+    /**
+     * Change Page DataTable
+     * */
     const onPage = (event) => {
         console.log("[ProductComponent] - Change Page DataTable: ", event);
         setLazyParams(event);
     }
+
+    /**
+     * Change Selection DataTable
+     * */
 
     const onSelectionChange = (event) => {
         const value = event.value;
@@ -117,14 +133,24 @@ const Product = (props) => {
     }
 
 
+    const unitPriceTemplate = (rowData) => {
+        return (
+            <React.Fragment>
+                {rowData.unitPrice} $
+            </React.Fragment>
+        );
+    }
+
+    /**
+     * Create Product
+     */
+
     const createProduct = (event) => {
         reset()
         setSelectedProduct(null);
         setVisibleRight(true);
     }
-    /**
-     * Create Product
-     */
+
     const defaultValues = {
         name: '',
         category: null,
@@ -220,9 +246,16 @@ const Product = (props) => {
                                        loading={loading}
                                        selection={selectedProducts} onSelectionChange={onSelectionChange}
                             >
+                                <Column field="productNumber" header="N°" body={(data, props) =>
+                                    <div className="grid">
+                                        <div className="col-12">
+                                            {props.rowIndex + 1}
+                                        </div>
+                                    </div>
+                                }/>
                                 <Column field="name" header="Name"/>
                                 <Column field="category" header="Category"/>
-                                <Column field="unitPrice" header="Unit Price"/>
+                                <Column field="unitPrice" header="Unit Price" body={unitPriceTemplate}/>
                                 <Column field="active" header="Status" body={statusTemplate}/>
                                 <Column field="options" header="Options" body={representativeBodyTemplate}/>
                             </DataTable>
@@ -239,8 +272,6 @@ const Product = (props) => {
                                 <div className="grid" style={{paddingTop: '40px'}}>
                                     <div className="col-3"><b>Name: </b></div>
                                     <div className="col-9">
-                                        {/*<InputText style={{width: '100%'}} name="name" {...register("name", {required: true, maxLength: 20})} />*/}
-                                        {/*{errors.name?.type === 'required' && "Name is required"}*/}
                                         <div className="field">
                                             <Controller name="name" control={control} rules={{required: 'Name is required.'}} render={({field}) => (
                                                 <InputText id={field.name} {...field} autoFocus/>
@@ -263,8 +294,6 @@ const Product = (props) => {
                                         </div>
 
                                     </div>
-
-
                                     <div className="col-3"><b>Unit price: </b></div>
                                     <div className="col-9">
                                         <div className="field">
@@ -290,8 +319,6 @@ const Product = (props) => {
                                         </div>
 
                                     </div>
-
-
                                     <div className="col-4" style={{paddingTop: '40px'}}>
                                         <Button label="Save" className="p-button-raised p-button-rounded" style={{width: '100%'}} onClick={() => {
                                             setSubmitted(true);
@@ -312,7 +339,8 @@ const Product = (props) => {
 }
 
 const comparisonFn = function (prevProps, nextProps) {
-    return (prevProps.location.pathname === nextProps.location.pathname) && (prevProps.colorMode === nextProps.colorMode);
-};
+        return (prevProps.location.pathname === nextProps.location.pathname) && (prevProps.colorMode === nextProps.colorMode);
+    }
+;
 
 export default React.memo(Product, comparisonFn);
