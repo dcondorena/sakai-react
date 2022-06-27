@@ -167,7 +167,7 @@ const Product = (props) => {
 
 
     const {control, formState: {errors}, handleSubmit, reset, setValue} = useForm({defaultValues});
-    const [setFormData] = useState({});
+    const [formData, setFormData] = useState({});
     const [submitted, setSubmitted] = useState(null);
 
     const onSubmit = (data) => {
