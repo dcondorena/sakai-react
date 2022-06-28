@@ -83,16 +83,6 @@ const OrderDetail = (props) => {
         // return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)}/>;
     }
 
-    /**
-     * Status Template DataTable
-     * */
-    const statusTemplate = (rowData) => {
-        return (
-            <React.Fragment>
-                {rowData.active ? <div>Active</div> : <div>Inactive</div>}
-            </React.Fragment>
-        );
-    }
 
     /**
      * Change Order Status
@@ -136,7 +126,8 @@ const OrderDetail = (props) => {
 
         if (submitted) {
             for (let item of data.items) {
-                products.push(item)
+                item.quantity = 1;
+                products.push(item);
             }
             console.log("[OrderComponent] - Final Items: ", products);
             orderService.updateOrder({items: products, status: order?.status}, order?.orderId).then(data => {
@@ -188,9 +179,9 @@ const OrderDetail = (props) => {
 
     }
 
-   /**
-    * Delete Item
-    * */
+    /**
+     * Delete Item
+     * */
     const onDelete = (index) => {
         console.log("[OrderDetailComponent] - Selected Index: ", index)
         let _products = [...products];
@@ -244,8 +235,9 @@ const OrderDetail = (props) => {
                             <DataTable value={products} editMode="row" dataKey="productId" onRowEditComplete={onRowEditComplete} responsiveLayout="scroll">
                                 <Column field="name" header="Name" editor={(options) => textEditor(options)} style={{width: '20%'}}/>
                                 <Column field="category" header="Category"/>
+                                <Column field="quantity" header="Quantity" editor={(options) => numberEditor(options)} style={{width: '10%'}}/>
                                 <Column field="unitPrice" header="Unit Price" editor={(options) => numberEditor(options)} style={{width: '20%'}}/>
-                                <Column field="active" header="Status" body={statusTemplate}/>
+                                <Column field="cost" header="Cost"/>
                                 <Column rowEditor headerStyle={{width: '10%', minWidth: '8rem'}} bodyStyle={{textAlign: 'center'}}/>
 
                                 <Column field="actions" header="Actions" body={(data, props) =>

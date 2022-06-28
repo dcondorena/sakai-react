@@ -145,6 +145,10 @@ const Order = (props) => {
     const onSubmit = (data) => {
         setFormData(data);
         console.log("[OrderComponent] - Form Data: ", data);
+        for(let item of data.items){
+            item.quantity = 1;
+        }
+        console.log("[OrderComponent] - Final Item List: ", data);
         orderService.saveOrder(data).then(data => {
             console.log("[OrderComponent]:  Result Save Order Request: ", data);
             reset();
