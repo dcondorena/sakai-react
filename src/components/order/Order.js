@@ -24,10 +24,20 @@ const Order = (props) => {
 
     const [selectedOrder, setSelectedOrder] = useState(null);
 
+    /**
+     * Service
+     * */
     const orderService = new OrderService();
+
+    /**
+     * Routing
+     * */
 
     const history = useHistory();
 
+    /**
+     * Load Orders
+     * */
     useEffect(() => {
         loadLazyData();
     }, [lazyParams]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -43,13 +53,17 @@ const Order = (props) => {
         });
 
     }
-
+    /**
+     * Change OrderPage
+     * */
     const onPage = (event) => {
         console.log("[OrderComponent] - Change Page DataTable: ", event);
         setLazyParams(event);
     }
 
-
+    /**
+     * Options DataTable
+     * */
     const representativeBodyTemplate = (rowData) => {
         /**
          * Update order
@@ -99,7 +113,9 @@ const Order = (props) => {
         );
     }
 
-
+    /**
+     * Amounts DataTable
+     * */
     const totalAmountTemplate = (rowData) => {
         return (
             <React.Fragment>
@@ -108,15 +124,16 @@ const Order = (props) => {
         );
     }
 
+    /**
+     * Create Order
+     */
     const createOrder = (event) => {
         loadProducts();
         reset()
         setSelectedOrder(null);
         setVisibleRight(true);
     }
-    /**
-     * Create Order
-     */
+
     const defaultValues = {
         customer: '',
         items: []
@@ -164,10 +181,6 @@ const Order = (props) => {
     const [loadingProducts, setLoadingProducts] = useState(false);
     const productService = new ProductService();
 
-    // useEffect(() => {
-    //     loadProducts();
-    // }, [])
-
     const loadProducts = () => {
         setLoadingProducts(true);
         productService.getProducts({
@@ -181,6 +194,10 @@ const Order = (props) => {
 
     }
 
+
+    /**
+     * View
+     * */
 
     return (
         <div className="grid p-fluid">

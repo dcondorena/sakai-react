@@ -22,10 +22,18 @@ const OrderDetail = (props) => {
     const [products, setProducts] = useState(null);
 
 
+    /**
+     * Routing
+     * */
+
     const goBack = () => {
         console.log(location.state.rowData);
         history.push('/orders')
     }
+
+    /**
+     * Load Order Detail
+     * */
 
     useEffect(() => {
         loadOrder();
@@ -43,6 +51,10 @@ const OrderDetail = (props) => {
             });
         }
     }
+
+    /**
+     * Edit Items
+     * */
 
     const onRowEditComplete = (e) => {
         console.log("[OrderDetailComponent] - OnRowEditComplete: ", e);
@@ -65,13 +77,15 @@ const OrderDetail = (props) => {
     const textEditor = (options) => {
         return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)}/>;
     }
-
     const numberEditor = (options) => {
 
         return <InputNumber inputId="integeronly" value={options.value} onValueChange={(e) => options.editorCallback(e.target.value)}/>
         // return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)}/>;
     }
 
+    /**
+     * Status Template DataTable
+     * */
     const statusTemplate = (rowData) => {
         return (
             <React.Fragment>
@@ -79,6 +93,10 @@ const OrderDetail = (props) => {
             </React.Fragment>
         );
     }
+
+    /**
+     * Change Order Status
+     * */
 
     const changeOrderStatus = (orderStatus) => {
         orderService.updateOrder({items: order?.items, status: orderStatus}, order?.orderId).then(data => {
@@ -93,6 +111,8 @@ const OrderDetail = (props) => {
             loadOrder();
         });
     }
+
+
     /**
      * Add Item
      */
@@ -106,6 +126,10 @@ const OrderDetail = (props) => {
     const {control, formState: {errors}, handleSubmit, reset} = useForm({defaultValues});
     const [formData, setFormData] = useState({});
 
+
+    const addItem = () => {
+        loadProducts();
+    }
     const onSubmit = (data) => {
         setFormData(data);
         console.log("[OrderComponent] - Form Data: ", data.items);
@@ -140,6 +164,7 @@ const OrderDetail = (props) => {
         reset()
         setVisibleRight(false);
     }
+
     /**
      * Load Items
      * */
@@ -163,11 +188,9 @@ const OrderDetail = (props) => {
 
     }
 
-    const addItem = () => {
-        loadProducts();
-    }
-
-
+   /**
+    * Delete Item
+    * */
     const onDelete = (index) => {
         console.log("[OrderDetailComponent] - Selected Index: ", index)
         let _products = [...products];
@@ -186,6 +209,10 @@ const OrderDetail = (props) => {
             loadOrder();
         });
     }
+
+    /**
+     * View
+     * */
 
     return (
         <div className="grid p-fluid">

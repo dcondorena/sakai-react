@@ -70,6 +70,11 @@ const Product = (props) => {
         // setSelectAll(value.length === totalRecords);
     }
 
+
+    /**
+     * DataTable Options
+     * */
+
     const representativeBodyTemplate = (rowData) => {
         /**
          * Update product
@@ -84,7 +89,6 @@ const Product = (props) => {
             setValue("unitPrice", rowData.unitPrice)
             setValue("active", rowData.active)
         }
-
         /**
          * Delete product
          * */
@@ -124,6 +128,10 @@ const Product = (props) => {
         );
     }
 
+    /**
+     * Status Template DataTable
+     * */
+
     const statusTemplate = (rowData) => {
         return (
             <React.Fragment>
@@ -132,6 +140,9 @@ const Product = (props) => {
         );
     }
 
+    /**
+     * Unit Price Template DataTable
+     * */
 
     const unitPriceTemplate = (rowData) => {
         return (
@@ -153,9 +164,9 @@ const Product = (props) => {
 
     const defaultValues = {
         name: '',
-        category: null,
-        unitePrice: null,
-        active: null
+        // category: null,
+        // unitePrice: null,
+        // active: null
     }
     const categoryList = [
         {label: 'Cookies', value: 'Cookies'},
@@ -176,7 +187,7 @@ const Product = (props) => {
         if (submitted) {
             if (selectedProduct) {
                 productService.updateProduct(data, selectedProduct).then(data => {
-                    console.log("[ProductComponent]:  Result Save Product Request: ", data);
+                    console.log("[ProductComponent]:  Result Update Product Request: ", data);
                     reset();
                     setVisibleRight(false);
                     setSelectedProduct(null);
@@ -226,6 +237,10 @@ const Product = (props) => {
         setVisibleRight(false);
         reset()
     }
+
+    /**
+     * View
+     * */
 
 
     return (

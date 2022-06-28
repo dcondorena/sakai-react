@@ -23,7 +23,7 @@ export class ProductService {
     }
 
     updateProduct(product, selectedProduct) {
-        console.log("[ProductService] - Update Product By ProductId: ", selectedProduct.productId)
+        console.log("[ProductService] - Update Product By ProductId: ", selectedProduct.productId, product)
         return axios.put('https://morning-thicket-18297.herokuapp.com/api/v1/products/' + selectedProduct.productId, product)
             .then(response => response.data)
             .catch(error => {
