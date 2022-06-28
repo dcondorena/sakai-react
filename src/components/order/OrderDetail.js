@@ -12,12 +12,16 @@ import {Controller, useForm} from "react-hook-form";
 import {MultiSelect} from "primereact/multiselect";
 import {ProductService} from "../../service/products/ProductService";
 import Swal from "sweetalert2";
+import {SpinnerRoundOutlined} from 'spinners-react';
 
 
 const OrderDetail = (props) => {
     const history = useHistory();
     const location = useLocation();
     const [order, setOrder] = useState(null);
+    const [orderLoading, setOrderLoading] = useState(true);
+    let [color, setColor] = useState("#e71010");
+
     const orderService = new OrderService();
     const [products, setProducts] = useState(null);
 
@@ -44,10 +48,12 @@ const OrderDetail = (props) => {
         if (!location.state) {
             history.push('/orders')
         } else {
+            setOrderLoading(true);
             orderService.getOrderById(location.state?.rowData.orderId).then(data => {
                 console.log("[OrderDetailComponent] - Result Order By OrderId Request: ", data);
                 setOrder(data);
                 setProducts(data.items)
+                setOrderLoading(false);
             });
         }
     }
@@ -204,131 +210,147 @@ const OrderDetail = (props) => {
     /**
      * View
      * */
-
-    return (
-        <div className="grid p-fluid">
-            <div className="col">
-                <div className="card">
-                    <div className="grid">
-                        <div className="col-4 col-offset-4">
-                            <h3>Order Detail</h3>
-                        </div>
-                        <div className="col-4">
-                            <Button label="Go Back" className="p-button-raised p-button-rounded p-button-success" onClick={goBack}/>
-                        </div>
-                        <div className="col-12">
-                            <h2>Order N° {order?.orderNumber}</h2>
-                        </div>
-                        <div className="col-12">
-                            <b>Customer: </b> {order?.customer}
-                        </div>
-                        <div className="col-12">
-                            <b>Status: </b> {order?.status}
-                        </div>
-                        <div className="col-12">
-                            <b>Date: </b> {order?.registerDate}
-                        </div>
-                        <div className="col-3 col-offset-9">
-                            <Button label="Add" className="p-button-raised p-button-rounded p-button-info" onClick={() => addItem()}/>
-                        </div>
-                        <div className="col-12">
-                            <DataTable value={products} editMode="row" dataKey="productId" onRowEditComplete={onRowEditComplete} responsiveLayout="scroll">
-                                <Column field="name" header="Name" editor={(options) => textEditor(options)} style={{width: '20%'}}/>
-                                <Column field="category" header="Category"/>
-                                <Column field="quantity" header="Quantity" editor={(options) => numberEditor(options)} style={{width: '10%'}}/>
-                                <Column field="unitPrice" header="Unit Price" editor={(options) => numberEditor(options)} style={{width: '20%'}}/>
-                                <Column field="cost" header="Cost"/>
-                                <Column rowEditor headerStyle={{width: '10%', minWidth: '8rem'}} bodyStyle={{textAlign: 'center'}}/>
-
-                                <Column field="actions" header="Actions" body={(data, props) =>
-                                    <div className="grid">
-                                        <div className="col-12">
-                                            <Button icon="pi pi-times" className="p-button-rounded p-button-danger p-button-outlined" aria-label="Cancel"
-                                                    onClick={(e) => {
-                                                        onDelete(props.rowIndex)
-                                                    }
-                                                    }/>
-                                        </div>
-                                    </div>
-                                }/>
-                            </DataTable>
-                        </div>
-                        <div className="col-4 col-offset-7">
-                            <h5>Subtotal: {order?.subtotal} $</h5>
-                        </div>
-                        <div className="col-4 col-offset-7">
-                            <h5>Taxes:</h5>
-                        </div>
-                        <div className="col-3 col-offset-8">
-                            <h6>Total City Tax: {order?.cityTaxAmount} $</h6>
-                        </div>
-                        <div className="col-3 col-offset-8">
-                            <h6>Total County Tax: {order?.countyTaxAmount} $</h6>
-                        </div>
-                        <div className="col-3 col-offset-8">
-                            <h6>Total State Tax: {order?.stateTaxAmount} $</h6>
-                        </div>
-                        <div className="col-3 col-offset-8">
-                            <h6>Total Federal Tax: {order?.federalTaxAmount} $</h6>
-                        </div>
-                        <div className="col-4 col-offset-7">
-                            <h5>Total Taxes: {order?.totalTaxesAmount} $</h5>
-                        </div>
-                        <div className="col-4 col-offset-7">
-                            <h5>Total: {order?.totalAmount} $</h5>
-                        </div>
-
-                        <div className="col-6 col-offset-6">
-                            <div className="grid">
-                                <div className="col-6">
-                                    <Button label="Complete Order" className="p-button-raised p-button-rounded p-button-success" onClick={() => changeOrderStatus('Completed')}/>
-                                </div>
-                                <div className="col-6">
-                                    <Button label="Reject Order" className="p-button-raised p-button-rounded p-button-danger" onClick={() => changeOrderStatus('Rejected')}/>
-                                </div>
+    if (orderLoading) {
+        return (
+            <div className="grid p-fluid">
+                <div className="col">
+                    <div className="card">
+                        <div className="grid">
+                            <div className="col-12" align="center" style={{paddingTop: '50%', paddingBottom: '50%'}}>
+                                <SpinnerRoundOutlined size={200} enabled={orderLoading}/>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        )
+    } else {
+        return (
+            <div className="grid p-fluid">
+                <div className="col">
+                    <div className="card">
+                        <div className="grid">
+                            <div className="col-4 col-offset-4">
+                                <h3>Order Detail</h3>
+                            </div>
+                            <div className="col-4">
+                                <Button label="Go Back" className="p-button-raised p-button-rounded p-button-success" onClick={goBack}/>
+                            </div>
+                            <div className="col-12">
+                                <h2>Order N° {order?.orderNumber}</h2>
+                            </div>
+                            <div className="col-12">
+                                <h5>Customer: <span style={{fontWeight: 'normal'}}>{order?.customer}</span></h5>
+                            </div>
+                            <div className="col-12">
+                                <h5>Status: <span style={{fontWeight: 'normal'}}>{order?.status}</span></h5>
+                            </div>
+                            <div className="col-12">
+                                <h5>Date: <span style={{fontWeight: 'normal'}}>{order?.registerDate}</span></h5>
+                            </div>
+                            <div className="col-3 col-offset-9">
+                                <Button label="Add" className="p-button-raised p-button-rounded p-button-info" onClick={() => addItem()}/>
+                            </div>
+                            <div className="col-12">
+                                <DataTable value={products} editMode="row" dataKey="productId" onRowEditComplete={onRowEditComplete} responsiveLayout="scroll">
+                                    <Column field="name" header="Name" editor={(options) => textEditor(options)} style={{width: '20%'}}/>
+                                    <Column field="category" header="Category"/>
+                                    <Column field="quantity" header="Quantity" editor={(options) => numberEditor(options)} style={{width: '10%'}}/>
+                                    <Column field="unitPrice" header="Unit Price" editor={(options) => numberEditor(options)} style={{width: '20%'}}/>
+                                    <Column field="cost" header="Cost"/>
+                                    <Column rowEditor headerStyle={{width: '10%', minWidth: '8rem'}} bodyStyle={{textAlign: 'center'}}/>
 
-            <Sidebar visible={visibleRight} position="right" style={{width: '35em'}} onHide={onCancel}>
-                <div className="grid p-fluid">
-                    <div className="col">
-                        <div className="card">
-                            <h3>Order</h3>
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                <div className="grid" style={{paddingTop: '40px'}}>
-                                    <div className="col-3"><b>Products: </b></div>
-                                    <div className="col-9">
-                                        <div className="field">
-                                            <Controller name="items" rules={{required: 'Items is required.'}} control={control} render={({field}) => (
-                                                <MultiSelect filter id={field.name} value={field.value} options={items} onChange={(e) => field.onChange(e.value)} optionLabel="name" placeholder="Select Items" maxSelectedLabels={3}/>
-                                            )}/>
+                                    <Column field="actions" header="Actions" body={(data, props) =>
+                                        <div className="grid">
+                                            <div className="col-12">
+                                                <Button icon="pi pi-times" className="p-button-rounded p-button-danger p-button-outlined" aria-label="Cancel"
+                                                        onClick={(e) => {
+                                                            onDelete(props.rowIndex)
+                                                        }
+                                                        }/>
+                                            </div>
                                         </div>
-                                        <div className="col-12">
-                                            {getFormErrorMessage('items')}
-                                        </div>
+                                    }/>
+                                </DataTable>
+                            </div>
+                            <div className="col-4 col-offset-7">
+                                <h5>Subtotal: {order?.subtotal} $</h5>
+                            </div>
+                            <div className="col-4 col-offset-7">
+                                <h5>Taxes:</h5>
+                            </div>
+                            <div className="col-3 col-offset-8">
+                                <h6>Total City Tax: {order?.cityTaxAmount} $</h6>
+                            </div>
+                            <div className="col-3 col-offset-8">
+                                <h6>Total County Tax: {order?.countyTaxAmount} $</h6>
+                            </div>
+                            <div className="col-3 col-offset-8">
+                                <h6>Total State Tax: {order?.stateTaxAmount} $</h6>
+                            </div>
+                            <div className="col-3 col-offset-8">
+                                <h6>Total Federal Tax: {order?.federalTaxAmount} $</h6>
+                            </div>
+                            <div className="col-4 col-offset-7">
+                                <h5>Total Taxes: {order?.totalTaxesAmount} $</h5>
+                            </div>
+                            <div className="col-4 col-offset-7">
+                                <h5>Total: {order?.totalAmount} $</h5>
+                            </div>
 
+                            <div className="col-6 col-offset-6">
+                                <div className="grid">
+                                    <div className="col-6">
+                                        <Button label="Complete Order" className="p-button-raised p-button-rounded p-button-success" onClick={() => changeOrderStatus('Completed')}/>
                                     </div>
-
-                                    <div className="col-4" style={{paddingTop: '40px'}}>
-                                        <Button label="Save" className="p-button-raised p-button-rounded" style={{width: '100%'}} type="submit" onClick={() => {
-                                            setSubmitted(true);
-                                        }}/>
-                                    </div>
-                                    <div className="col-4 col-offset-4" style={{paddingTop: '40px'}}>
-                                        <Button label="Cancel" className="p-button-raised p-button-rounded" style={{width: '100%'}} onClick={onCancel}/>
+                                    <div className="col-6">
+                                        <Button label="Reject Order" className="p-button-raised p-button-rounded p-button-danger" onClick={() => changeOrderStatus('Rejected')}/>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </Sidebar>
-        </div>
 
-    );
+                <Sidebar visible={visibleRight} position="right" style={{width: '35em'}} onHide={onCancel}>
+                    <div className="grid p-fluid">
+                        <div className="col">
+                            <div className="card">
+                                <h3>Order</h3>
+                                <form onSubmit={handleSubmit(onSubmit)}>
+                                    <div className="grid" style={{paddingTop: '40px'}}>
+                                        <div className="col-3"><b>Products: </b></div>
+                                        <div className="col-9">
+                                            <div className="field">
+                                                <Controller name="items" rules={{required: 'Items is required.'}} control={control} render={({field}) => (
+                                                    <MultiSelect filter id={field.name} value={field.value} options={items} onChange={(e) => field.onChange(e.value)} optionLabel="name" placeholder="Select Items" maxSelectedLabels={3}/>
+                                                )}/>
+                                            </div>
+                                            <div className="col-12">
+                                                {getFormErrorMessage('items')}
+                                            </div>
+
+                                        </div>
+
+                                        <div className="col-4" style={{paddingTop: '40px'}}>
+                                            <Button label="Save" className="p-button-raised p-button-rounded" style={{width: '100%'}} type="submit" onClick={() => {
+                                                setSubmitted(true);
+                                            }}/>
+                                        </div>
+                                        <div className="col-4 col-offset-4" style={{paddingTop: '40px'}}>
+                                            <Button label="Cancel" className="p-button-raised p-button-rounded" style={{width: '100%'}} onClick={onCancel}/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </Sidebar>
+            </div>
+        );
+    }
+
+
 }
 
 const comparisonFn = function (prevProps, nextProps) {
