@@ -334,7 +334,7 @@ const Product = (props) => {
 
                                     </div>
                                     <div className="col-4" style={{paddingTop: '40px'}}>
-                                        <Button label="Save" className="p-button-raised p-button-rounded" style={{width: '100%'}} onClick={() => {
+                                        <Button label="Guardar" className="p-button-raised p-button-rounded" style={{width: '100%'}} onClick={() => {
                                             setSubmitted(true);
                                         }} type="submit"/>
                                     </div>
