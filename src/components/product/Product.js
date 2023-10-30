@@ -21,8 +21,8 @@ const Product = (props) => {
     const [selectedProducts, setSelectedProducts] = useState(null);
     const [lazyParams, setLazyParams] = useState({
         first: 0,
-        rows: 10,
-        page: 1
+        rows: 20,
+        page: 5
     });
 
     const [selectedProduct, setSelectedProduct] = useState(null);
@@ -108,8 +108,8 @@ const Product = (props) => {
                 })
                 setLazyParams({
                     first: 0,
-                    rows: 10,
-                    page: 1
+                    rows: 20,
+                    page: 5
                 })
             });
         }
@@ -199,8 +199,8 @@ const Product = (props) => {
                     })
                     setLazyParams({
                         first: 0,
-                        rows: 10,
-                        page: 1
+                        rows: 20,
+                        page: 5
                     })
                 });
             } else {
@@ -218,8 +218,8 @@ const Product = (props) => {
                     })
                     setLazyParams({
                         first: 0,
-                        rows: 10,
-                        page: 1
+                        rows: 20,
+                        page: 5
                     })
                 });
             }
