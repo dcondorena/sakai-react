@@ -21,7 +21,7 @@ const Product = (props) => {
     const [selectedProducts, setSelectedProducts] = useState(null);
     const [lazyParams, setLazyParams] = useState({
         first: 0,
-        rows: 2,
+        rows: 10,
         page: 1
     });
 
@@ -108,7 +108,7 @@ const Product = (props) => {
                 })
                 setLazyParams({
                     first: 0,
-                    rows: 2,
+                    rows: 10,
                     page: 1
                 })
             });
@@ -118,10 +118,10 @@ const Product = (props) => {
             <React.Fragment>
                 <div className="grid">
                     <div className="col-6">
-                        <Button label="Edit" className="p-button-raised p-button-rounded p-button-warning" onClick={selectedData}/>
+                        <Button label="Editar" className="p-button-raised p-button-rounded p-button-warning" onClick={selectedData}/>
                     </div>
                     <div className="col-6">
-                        <Button label="Delete" className="p-button-raised p-button-rounded p-button-danger" onClick={onDelete}/>
+                        <Button label="Borrar" className="p-button-raised p-button-rounded p-button-danger" onClick={onDelete}/>
                     </div>
                 </div>
             </React.Fragment>
@@ -147,7 +147,7 @@ const Product = (props) => {
     const unitPriceTemplate = (rowData) => {
         return (
             <React.Fragment>
-                {rowData.unitPrice} $
+                {rowData.unitPrice} bolivianos
             </React.Fragment>
         );
     }
@@ -169,11 +169,10 @@ const Product = (props) => {
         // active: null
     }
     const categoryList = [
-        {label: 'Cookies', value: 'Cookies'},
-        {label: 'Candies', value: 'Candies'},
-        {label: 'Cakes', value: 'Cakes'},
-        {label: 'Desserts', value: 'Desserts'},
-        {label: 'Drinks', value: 'Drinks'}
+        {label: 'Pantalones', value: 'Pantalones'},
+        {label: 'Sudaderas', value: 'Sudaderas'},
+        {label: 'Poleras', value: 'Poleras'}
+       
     ];
 
 
@@ -200,7 +199,7 @@ const Product = (props) => {
                     })
                     setLazyParams({
                         first: 0,
-                        rows: 2,
+                        rows: 10,
                         page: 1
                     })
                 });
@@ -219,7 +218,7 @@ const Product = (props) => {
                     })
                     setLazyParams({
                         first: 0,
-                        rows: 2,
+                        rows: 10,
                         page: 1
                     })
                 });
@@ -249,11 +248,11 @@ const Product = (props) => {
                 <div className="card">
                     <div className="grid">
                         <div className="col-12">
-                            <h3>Products</h3>
+                            <h3>Productos</h3>
                         </div>
 
                         <div className="col-3 col-offset-9">
-                            <Button label="Create Product" className="p-button-raised p-button-rounded p-button-success" onClick={createProduct}/>
+                            <Button label="Crear Producto" className="p-button-raised p-button-rounded p-button-success" onClick={createProduct}/>
                         </div>
                         <div className="col-12">
                             <DataTable value={products} lazy responsiveLayout="scroll" dataKey="id"
@@ -268,11 +267,11 @@ const Product = (props) => {
                                         </div>
                                     </div>
                                 }/>
-                                <Column field="name" header="Name"/>
-                                <Column field="category" header="Category"/>
-                                <Column field="unitPrice" header="Unit Price" body={unitPriceTemplate}/>
-                                <Column field="active" header="Status" body={statusTemplate}/>
-                                <Column field="options" header="Options" body={representativeBodyTemplate}/>
+                                <Column field="name" header="Nombre"/>
+                                <Column field="category" header="Categoria"/>
+                                <Column field="unitPrice" header="Precio Unitario" body={unitPriceTemplate}/>
+                                <Column field="active" header="Estado" body={statusTemplate}/>
+                                <Column field="options" header="Opciones" body={representativeBodyTemplate}/>
                             </DataTable>
                         </div>
                     </div>
@@ -285,7 +284,7 @@ const Product = (props) => {
                             <h3>Product</h3>
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <div className="grid" style={{paddingTop: '40px'}}>
-                                    <div className="col-3"><b>Name: </b></div>
+                                    <div className="col-3"><b>Nombre: </b></div>
                                     <div className="col-9">
                                         <div className="field">
                                             <Controller name="name" control={control} rules={{required: 'Name is required.'}} render={({field}) => (
@@ -297,7 +296,7 @@ const Product = (props) => {
                                         </div>
                                     </div>
 
-                                    <div className="col-3"><b>Category: </b></div>
+                                    <div className="col-3"><b>Categoria: </b></div>
                                     <div className="col-9">
                                         <div className="field">
                                             <Controller name="category" rules={{required: 'Category is required.'}} control={control} render={({field}) => (
@@ -309,7 +308,7 @@ const Product = (props) => {
                                         </div>
 
                                     </div>
-                                    <div className="col-3"><b>Unit price: </b></div>
+                                    <div className="col-3"><b>Precio Unitario: </b></div>
                                     <div className="col-9">
                                         <div className="field">
                                             <Controller name="unitPrice" rules={{required: 'Unit price is required.'}} control={control} render={({field}) => (
@@ -322,7 +321,7 @@ const Product = (props) => {
 
                                     </div>
 
-                                    <div className="col-3"><b>Active: </b></div>
+                                    <div className="col-3"><b>Activo: </b></div>
                                     <div className="col-9">
                                         <div className="field">
                                             <Controller name="active" control={control} render={({field}) => (

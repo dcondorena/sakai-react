@@ -231,33 +231,33 @@ const OrderDetail = (props) => {
                     <div className="card">
                         <div className="grid">
                             <div className="col-4 col-offset-4">
-                                <h3>Order Detail</h3>
+                                <h3>Recibo</h3>
                             </div>
                             <div className="col-4">
-                                <Button label="Go Back" className="p-button-raised p-button-rounded p-button-success" onClick={goBack}/>
+                                <Button label="Volver" className="p-button-raised p-button-rounded p-button-success" onClick={goBack}/>
                             </div>
                             <div className="col-12">
-                                <h2>Order N° {order?.orderNumber}</h2>
+                                <h2>Recibo N° {order?.orderNumber}</h2>
                             </div>
                             <div className="col-12">
-                                <h5>Customer: <span style={{fontWeight: 'normal'}}>{order?.customer}</span></h5>
+                                <h5>Cliente: <span style={{fontWeight: 'normal'}}>{order?.customer}</span></h5>
                             </div>
                             <div className="col-12">
-                                <h5>Status: <span style={{fontWeight: 'normal'}}>{order?.status}</span></h5>
+                                <h5>Estado: <span style={{fontWeight: 'normal'}}>{order?.status}</span></h5>
                             </div>
                             <div className="col-12">
-                                <h5>Date: <span style={{fontWeight: 'normal'}}>{order?.registerDate}</span></h5>
+                                <h5>Datos: <span style={{fontWeight: 'normal'}}>{order?.registerDate}</span></h5>
                             </div>
                             <div className="col-3 col-offset-9">
-                                <Button label="Add" className="p-button-raised p-button-rounded p-button-info" onClick={() => addItem()}/>
+                                <Button label="Agregar" className="p-button-raised p-button-rounded p-button-info" onClick={() => addItem()}/>
                             </div>
                             <div className="col-12">
                                 <DataTable value={products} editMode="row" dataKey="productId" onRowEditComplete={onRowEditComplete} responsiveLayout="scroll">
-                                    <Column field="name" header="Name" editor={(options) => textEditor(options)} style={{width: '20%'}}/>
-                                    <Column field="category" header="Category"/>
-                                    <Column field="quantity" header="Quantity" editor={(options) => numberEditor(options)} style={{width: '10%'}}/>
-                                    <Column field="unitPrice" header="Unit Price" editor={(options) => numberEditor(options)} style={{width: '20%'}}/>
-                                    <Column field="cost" header="Cost"/>
+                                    <Column field="name" header="Nombre" editor={(options) => textEditor(options)} style={{width: '20%'}}/>
+                                    <Column field="category" header="Categoria"/>
+                                    <Column field="quantity" header="Cantidad" editor={(options) => numberEditor(options)} style={{width: '10%'}}/>
+                                    <Column field="unitPrice" header="Precio Unitario" editor={(options) => numberEditor(options)} style={{width: '20%'}}/>
+                                    <Column field="cost" header="Costo"/>
                                     <Column rowEditor headerStyle={{width: '10%', minWidth: '8rem'}} bodyStyle={{textAlign: 'center'}}/>
 
                                     <Column field="actions" header="Actions" body={(data, props) =>
@@ -274,37 +274,37 @@ const OrderDetail = (props) => {
                                 </DataTable>
                             </div>
                             <div className="col-4 col-offset-7">
-                                <h5>Subtotal: {order?.subtotal} $</h5>
+                                <h5>Subtotal: {order?.subtotal} Bolivianos.</h5>
                             </div>
                             <div className="col-4 col-offset-7">
-                                <h5>Taxes:</h5>
+                                <h5>Impuestos:</h5>
                             </div>
                             <div className="col-3 col-offset-8">
-                                <h6>Total City Tax: {order?.cityTaxAmount} $</h6>
+                                <h6>impuesto de ciudad: {order?.cityTaxAmount} Bolivianos.</h6>
                             </div>
                             <div className="col-3 col-offset-8">
-                                <h6>Total County Tax: {order?.countyTaxAmount} $</h6>
+                                <h6>impuesto al pais: {order?.countyTaxAmount} Bolivianos.</h6>
                             </div>
                             <div className="col-3 col-offset-8">
-                                <h6>Total State Tax: {order?.stateTaxAmount} $</h6>
+                                <h6>impuesto al dpto: {order?.stateTaxAmount} Bolivianos.</h6>
                             </div>
                             <div className="col-3 col-offset-8">
-                                <h6>Total Federal Tax: {order?.federalTaxAmount} $</h6>
+                                <h6>impuesto Federal: {order?.federalTaxAmount} Bolivianos.</h6>
                             </div>
                             <div className="col-4 col-offset-7">
-                                <h5>Total Taxes: {order?.totalTaxesAmount} $</h5>
+                                <h5>impuestos totales: {order?.totalTaxesAmount} Bolivianos.</h5>
                             </div>
                             <div className="col-4 col-offset-7">
-                                <h5>Total: {order?.totalAmount} $</h5>
+                                <h5>Total: {order?.totalAmount} Bolivianos.</h5>
                             </div>
 
                             <div className="col-6 col-offset-6">
                                 <div className="grid">
                                     <div className="col-6">
-                                        <Button label="Complete Order" className="p-button-raised p-button-rounded p-button-success" onClick={() => changeOrderStatus('Completed')}/>
+                                        <Button label="Orden Completada " className="p-button-raised p-button-rounded p-button-success" onClick={() => changeOrderStatus('Completed')}/>
                                     </div>
                                     <div className="col-6">
-                                        <Button label="Reject Order" className="p-button-raised p-button-rounded p-button-danger" onClick={() => changeOrderStatus('Rejected')}/>
+                                        <Button label="Orden Rechazada" className="p-button-raised p-button-rounded p-button-danger" onClick={() => changeOrderStatus('Rejected')}/>
                                     </div>
                                 </div>
                             </div>

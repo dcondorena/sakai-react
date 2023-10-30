@@ -1,12 +1,18 @@
 import axios from 'axios'
 
 export class OrderService {
+    isProduction = false
+    test = 'http://localhost:3300/api/v1'
+    prod = 'https://store-backend-ty8d.onrender.com/api/v1'
+    host = this.isProduction ? this.prod : this.test
 
-    getOrders(params) {
-        return axios.get('https://store-backend-ty8d.onrender.com/api/v1/orders', {
+
+    getOrders(params, globalFilterValue) {
+        return axios.get(this.host + '/orders', {
             params: {
                 page: params.first / 2,
-                size: params.rows
+                size: params.rows,
+                orderNumber: globalFilterValue
             }
         }).then(res => res.data).catch(error => {
             console.error('There was an error!', error);
@@ -14,16 +20,16 @@ export class OrderService {
     }
 
     getOrderById(orderId) {
-        return axios.get('https://store-backend-ty8d.onrender.com/api/v1/orders/' + orderId)
+        return axios.get(this.host + '/orders/' + orderId)
             .then(res => res.data).catch(error => {
-            console.error('There was an error!', error);
-        });
+                console.error('There was an error!', error);
+            });
     }
 
 
     saveOrder(order) {
         console.log("[OrderService] - Save Order Request Data", order)
-        return axios.post('https://store-backend-ty8d.onrender.com/api/v1/orders', order)
+        return axios.post(this.host + '/orders', order)
             .then(response => response.data)
             .catch(error => {
                 console.error('There was an error!', error);
@@ -32,7 +38,7 @@ export class OrderService {
 
     updateOrder(order, orderId) {
         console.log("[OrderService] - Update Order By OrderId: ", orderId)
-        return axios.put('https://store-backend-ty8d.onrender.com/api/v1/orders/' + orderId, order)
+        return axios.put(this.host + '/orders/' + orderId, order)
             .then(response => response.data)
             .catch(error => {
                 console.error('There was an error!', error);
@@ -41,7 +47,7 @@ export class OrderService {
 
     deleteOrder(selectedOrder) {
         console.log("[OrderService] - Delete Order By OrderId: ", selectedOrder.orderId)
-        return axios.delete('https://store-backend-ty8d.onrender.com/api/v1/orders/' + selectedOrder.orderId)
+        return axios.delete(this.host + '/orders/' + selectedOrder.orderId)
             .then(response => response.data)
             .catch(error => {
                 console.error('There was an error!', error);

@@ -17,7 +17,7 @@ const Order = (props) => {
     const [orders, setOrders] = useState(null);
     const [lazyParams, setLazyParams] = useState({
         first: 0,
-        rows: 2,
+        rows: 10,
         page: 1
     });
     const [visibleRight, setVisibleRight] = useState(false);
@@ -93,7 +93,7 @@ const Order = (props) => {
                 })
                 setLazyParams({
                     first: 0,
-                    rows: 2,
+                    rows: 10,
                     page: 1
                 })
             });
@@ -103,10 +103,10 @@ const Order = (props) => {
             <React.Fragment>
                 <div className="grid">
                     <div className="col-6">
-                        <Button label="Detail" className="p-button-raised p-button-rounded p-button-warning" onClick={selectedData}/>
+                        <Button label="Detalle" className="p-button-raised p-button-rounded p-button-warning" onClick={selectedData}/>
                     </div>
                     <div className="col-6">
-                        <Button label="Delete" className="p-button-raised p-button-rounded p-button-danger" onClick={onDelete}/>
+                        <Button label="Borrar" className="p-button-raised p-button-rounded p-button-danger" onClick={onDelete}/>
                     </div>
                 </div>
             </React.Fragment>
@@ -119,7 +119,7 @@ const Order = (props) => {
     const totalAmountTemplate = (rowData) => {
         return (
             <React.Fragment>
-                {rowData.totalAmount} $
+                {rowData.totalAmount} Bolivianos.
             </React.Fragment>
         );
     }
@@ -163,7 +163,7 @@ const Order = (props) => {
             })
             setLazyParams({
                 first: 0,
-                rows: 2,
+                rows: 10,
                 page: 1
             })
         });
@@ -209,11 +209,11 @@ const Order = (props) => {
                 <div className="card">
                     <div className="grid">
                         <div className="col-12">
-                            <h3>Orders</h3>
+                            <h3>Ordenes/Pedidos</h3>
                         </div>
 
                         <div className="col-3 col-offset-9">
-                            <Button label="Create Order" className="p-button-raised p-button-rounded p-button-success" onClick={createOrder}/>
+                            <Button label="Nuevo Pedido" className="p-button-raised p-button-rounded p-button-success" onClick={createOrder}/>
                         </div>
                         <div className="col-12">
                             <DataTable value={orders} lazy responsiveLayout="scroll" dataKey="id"
@@ -221,11 +221,11 @@ const Order = (props) => {
                                        loading={loading}
                             >
                                 <Column field="orderNumber" header="N°"/>
-                                <Column field="customer" header="Consumer"/>
-                                <Column field="status" header="Status"/>
-                                <Column field="registerDate" header="Date"/>
+                                <Column field="customer" header="Cliente"/>
+                                <Column field="status" header="Estado"/>
+                                <Column field="registerDate" header="Datos"/>
                                 <Column field="totalAmount" header="Total" body={totalAmountTemplate}/>
-                                <Column field="actions" header="Actions" body={representativeBodyTemplate}/>
+                                <Column field="actions" header="Acciones" body={representativeBodyTemplate}/>
                             </DataTable>
                         </div>
                     </div>
