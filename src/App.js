@@ -139,11 +139,11 @@ const App = () => {
         {
             label: 'Main Menu',
             items: [{
-                label: 'Home', icon: 'pi pi-fw pi-home', to: '/'
+                label: 'Inicio', icon: 'pi pi-fw pi-home', to: '/'
             },{
-                label: 'Products', icon: 'pi pi-fw pi-arrow-circle-right', to: '/products'
+                label: 'Productos', icon: 'pi pi-fw pi-arrow-circle-right', to: '/products'
             },{
-                label: 'Orders', icon: 'pi pi-fw pi-arrow-circle-right', to: '/orders'
+                label: 'Ordenes', icon: 'pi pi-fw pi-arrow-circle-right', to: '/orders'
             }]
         }
     ];
