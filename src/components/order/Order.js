@@ -213,7 +213,7 @@ const Order = (props) => {
                         </div>
 
                         <div className="col-3 col-offset-9">
-                            <Button label="Nuevo Pedido" className="p-button-raised p-button-rounded p-button-success" onClick={createOrder}/>
+                            <Button label="Nuevo Pedido/Venta" className="p-button-raised p-button-rounded p-button-success" onClick={createOrder}/>
                         </div>
                         <div className="col-12">
                             <DataTable value={orders} lazy responsiveLayout="scroll" dataKey="id"

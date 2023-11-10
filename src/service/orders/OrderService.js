@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export class OrderService {
-    isProduction = false
+    isProduction = true
     test = 'http://localhost:3300/api/v1'
     prod = 'https://store-backend-ty8d.onrender.com/api/v1'
     host = this.isProduction ? this.prod : this.test

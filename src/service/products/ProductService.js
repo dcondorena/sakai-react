@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export class ProductService {
-    isProduction = false
+    isProduction = true
     test = 'http://localhost:3300/api/v1'
     prod = this.host + ''
     host = this.isProduction ? this.prod : this.test
