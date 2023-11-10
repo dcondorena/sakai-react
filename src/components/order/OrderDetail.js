@@ -274,28 +274,28 @@ const OrderDetail = (props) => {
                                 </DataTable>
                             </div>
                             <div className="col-4 col-offset-7">
-                                <h5>Subtotal: {order?.subtotal} Bolivianos.</h5>
+                                <h5>Subtotal: {order?.subtotal} Bs.</h5>
                             </div>
                             <div className="col-4 col-offset-7">
                                 <h5>Impuestos:</h5>
                             </div>
                             <div className="col-3 col-offset-8">
-                                <h6>impuesto de ciudad: {order?.cityTaxAmount} Bolivianos.</h6>
+                                <h6>impuesto de ciudad: {order?.cityTaxAmount} Bs.</h6>
                             </div>
                             <div className="col-3 col-offset-8">
-                                <h6>impuesto al pais: {order?.countyTaxAmount} Bolivianos.</h6>
+                                <h6>impuesto al pais: {order?.countyTaxAmount} Bs.</h6>
                             </div>
                             <div className="col-3 col-offset-8">
-                                <h6>impuesto al dpto: {order?.stateTaxAmount} Bolivianos.</h6>
+                                <h6>impuesto al dpto: {order?.stateTaxAmount} Bs.</h6>
                             </div>
                             <div className="col-3 col-offset-8">
-                                <h6>impuesto Federal: {order?.federalTaxAmount} Bolivianos.</h6>
+                                <h6>impuesto Federal: {order?.federalTaxAmount} Bs.</h6>
                             </div>
                             <div className="col-4 col-offset-7">
-                                <h5>impuestos totales: {order?.totalTaxesAmount} Bolivianos.</h5>
+                                <h5>impuestos totales: {order?.totalTaxesAmount} Bs.</h5>
                             </div>
                             <div className="col-4 col-offset-7">
-                                <h5>Total: {order?.totalAmount} Bolivianos.</h5>
+                                <h5>Total: {order?.totalAmount} Bs.</h5>
                             </div>
 
                             <div className="col-6 col-offset-6">

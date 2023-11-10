@@ -147,7 +147,7 @@ const Product = (props) => {
     const unitPriceTemplate = (rowData) => {
         return (
             <React.Fragment>
-                {rowData.unitPrice} bolivianos
+                {rowData.unitPrice} Bs.
             </React.Fragment>
         );
     }

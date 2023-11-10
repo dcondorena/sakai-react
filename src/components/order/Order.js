@@ -119,7 +119,7 @@ const Order = (props) => {
     const totalAmountTemplate = (rowData) => {
         return (
             <React.Fragment>
-                {rowData.totalAmount} Bolivianos.
+                {rowData.totalAmount} Bs.
             </React.Fragment>
         );
     }
